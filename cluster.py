@@ -7,58 +7,58 @@ import os
 import cv2
 import numpy as np
 
-# Arguments parser
-ap = argparse.ArgumentParser()
-# Parse the arguments using argument parser
-# Parse it into image file name and the number of cluster for quantization
-ap.add_argument("-i", "--image", required=True, help="Image file name in images path")
-ap.add_argument("-c", "--clusters", required=True, type=int, help="# of clusters for quantization")
-args = vars(ap.parse_args())
+# # Arguments parser
+# ap = argparse.ArgumentParser()
+# # Parse the arguments using argument parser
+# # Parse it into image file name and the number of cluster for quantization
+# ap.add_argument("-i", "--image", required=True, help="Image file name in images path")
+# ap.add_argument("-c", "--clusters", required=True, type=int, help="# of clusters for quantization")
+# args = vars(ap.parse_args())
 
-def main():
+# def main():
 
-    # Load the image then grab its width and height
-    img_path = os.path.join(os.getcwd(), "images", args["image"])
-    image = cv2.imread(img_path)
-    (h, w) = image.shape[:2]
+#     # Load the image then grab its width and height
+#     img_path = os.path.join(os.getcwd(), "images", args["image"])
+#     image = cv2.imread(img_path)
+#     (h, w) = image.shape[:2]
 
-    # Convert image from RGB space to LAB
-    # Do this to apply euclidean distance which s better understood
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+#     # Convert image from RGB space to LAB
+#     # Do this to apply euclidean distance which s better understood
+#     image = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
 
-    # Reshape the image into a feature vector so that kmeans can be applied
-    image = image.reshape((image.shape[0] * image.shape[1], 3))
+#     # Reshape the image into a feature vector so that kmeans can be applied
+#     image = image.reshape((image.shape[0] * image.shape[1], 3))
 
-    # Apply kmeans with the number of clusters then create quantized image
-    print("Fitting K-Means...")
-    clt = MiniBatchKMeans(n_clusters=args["clusters"])
-    clt.fit(image)
-    labels = clt.fit_predict(image)
-    quant = quantize(clt, labels)
+#     # Apply kmeans with the number of clusters then create quantized image
+#     print("Fitting K-Means...")
+#     clt = MiniBatchKMeans(n_clusters=args["clusters"])
+#     clt.fit(image)
+#     labels = clt.fit_predict(image)
+#     quant = quantize(clt, labels)
 
-    # # Reshape the vectors of the images
-    # # Convert to RGB
-    # # Save to directory and show images
-    (image, quant) = output_quantized(image, quant, h, w)
+#     # # Reshape the vectors of the images
+#     # # Convert to RGB
+#     # # Save to directory and show images
+#     (image, quant) = output_quantized(image, quant, h, w)
 
-    # Build the histogram
-    # Plot the colors of each cluster
-    print("Building color histogram...")
-    hist = centroid_histogram(clt, labels)
-    print("Making bar chart...")
-    bar = plot_bar(hist, clt.cluster_centers_)
+#     # Build the histogram
+#     # Plot the colors of each cluster
+#     print("Building color histogram...")
+#     hist = centroid_histogram(clt, labels)
+#     print("Making bar chart...")
+#     bar = plot_bar(hist, clt.cluster_centers_)
 
-    # Save the image and bar plot to the output folder
-    save(quant, bar)
+#     # Save the image and bar plot to the output folder
+#     save(quant, bar)
 
-    # display the image
-    # Display the bar chart
-    # wait for keypress to close 
-    print("Displaying original and quantized images...")
-    cv2.imshow("Quantized and Original Image", np.hstack([image,quant]))
-    print("Displaying bar chart")
-    cv2.imshow("Bar chart", bar)
-    cv2.waitKey(0)
+#     # display the image
+#     # Display the bar chart
+#     # wait for keypress to close 
+#     print("Displaying original and quantized images...")
+#     cv2.imshow("Quantized and Original Image", np.hstack([image,quant]))
+#     print("Displaying bar chart")
+#     cv2.imshow("Bar chart", bar)
+#     cv2.waitKey(0)
 
     
 
