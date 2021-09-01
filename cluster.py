@@ -140,6 +140,6 @@ def save(quant, bar):
         raise Exception("Could not write chart")
     
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
     
