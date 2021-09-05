@@ -3,26 +3,14 @@ import streamlit as st
 # image processing packages
 from sklearn.cluster import MiniBatchKMeans
 import matplotlib.pyplot as plt
-import argparse
 import os
 import cv2
 from PIL import Image
 import numpy as np
 import base64
 from cluster import quantize, output_quantized, centroid_histogram, plot_bar
-import time
 
-st.set_page_config("wide")
-
-# sidebar
-# st.sidebar.header("")
-# st.sidebar.text("(Description of application)")
-# st.sidebar.subheader("Original image")
-# st.sidebar.image('images/sunflower.jpg')
-# st.sidebar.subheader("Valued Sketch")
-# st.sidebar.image('output/quantized_sunflower.jpg.jpg')
-# st.sidebar.subheader("Histogram of dominant colors")
-# st.sidebar.image('output/sunflower.jpg_bar_chart.jpg')
+st.set_page_config(page_title="Create Your Value Sketches", layout="wide")
 
 about = st.container()
 app_con = st.container()
@@ -32,36 +20,36 @@ def main():
     nav = st.sidebar.radio("", ['About', 'App'])
 
     if nav == 'About':
-        # about.write("This is the about page")
-        about.header("Welcome to my value sketching app")
-        about.text("(Description of application)")
-        about.subheader("Original image")
-        about.image('images/sunflower.jpg')
-        # about.subheader("Valued Sketch")
-        # about.image('output/quantized_sunflower.jpg.jpg')
-        # about.subheader("Histogram of dominant colors")
-        # about.image('output/sunflower.jpg_bar_chart.jpg')
+        with about:
+            st.header("Welcome to my value sketching app")
+            st.text("(Description of application)")
+            st.subheader("Original image")
+            st.image('images/sunflower.jpg')
 
-        about.col1, about.col2 = st.columns(2)
+            st.col1, st.col2 = st.columns(2)
 
-        about.col1.subheader("Valued Sketch")
-        about.col1.image('output/quantized_sunflower.jpg.jpg')
+            st.col1.subheader("Valued Sketch")
+            st.col1.image('output/quantized_sunflower.jpg.jpg')
 
-        about.col2.subheader("Histogram of dominant colors")
-        about.col2.image('output/sunflower.jpg_bar_chart.jpg')
+            st.col2.subheader("Histogram of dominant colors")
+            st.col2.image('output/sunflower.jpg_bar_chart.jpg')
 
     elif nav == 'App':
-        app_con.write("This is the application")
+        with app_con:
+            st.write("This is the application")
 
-        image_file = app_con.file_uploader("Upload Image",type=['png','jpeg','jpg'])
+            image_file = st.file_uploader("Upload Image",type=['png','jpeg','jpg'])
         if image_file is not None:
-            
+
             img = Image.open(image_file)
-            app_con.image(img,width=250)
             filename = os.path.splitext(image_file.name)[0]
             file_details = {"Filename":filename,"FileType":image_file.type,"FileSize":image_file.size}
-            app_con.write(file_details)
+            
+            with app_con:
+                st.image(img,width=250)
+                st.write(file_details)
 
+            
             # num clusters input
             n_clusters = app_con.slider("How many colors would you like?", min_value=2, max_value=10, value=2)
 
@@ -169,10 +157,6 @@ def download_img(img, filename, piece):
                 }}
         </style> """
     return custom_css + href
-
-    # st.markdown(href, unsafe_allow_html=True)
-
-
 
 
 if __name__ == '__main__':
