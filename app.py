@@ -14,10 +14,11 @@ st.set_page_config(page_title="Create Your Value Sketches", layout="wide")
 
 about = st.container()
 app_con = st.container()
+explainer = st.container()
 
 def main():
 
-    nav = st.sidebar.radio("", ['About', 'App'])
+    nav = st.sidebar.radio("", ['About', 'App', "Code and Explanation"])
 
     if nav == 'About':
         with about:
@@ -76,6 +77,9 @@ def main():
 
                 progress.progress(100)
                 progress.empty()
+    elif nav == 'Code and Explanation':
+        with explainer:
+            st.write("This is the explanaation of the code")
 
 
 
@@ -127,10 +131,6 @@ def download_img(img, filename, piece):
     b64 = base64.b64encode(cv2.imencode('.jpeg', img)[1]).decode()
     new_filename = "{}_{}.{}".format(filename, piece, 'jpeg')
     href = f'<a href="data:file/jpeg;base64,{b64}" id="{piece}" download="{new_filename}">Download</a>'
-    # buffered = BytesIO()
-    # img.save(buffered, format="JPEG")
-    # img_str = base64.b64encode(buffered.getvalue()).decode()
-    # href =  f'<a href="data:file/jpeg;base64,{img_str}" download="{filename}">Download</a>'
     custom_css = f""" 
         <style>
             #{piece} {{
@@ -158,6 +158,6 @@ def download_img(img, filename, piece):
         </style> """
     return custom_css + href
 
-
+# call main
 if __name__ == '__main__':
     main()
